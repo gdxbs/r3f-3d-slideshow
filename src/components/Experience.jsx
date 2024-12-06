@@ -15,30 +15,29 @@ import { Scene } from "./Scene";
 
 export const scenes = [
   {
-    path: "models/cybertruck_scene.glb",
+    path: "models/macame.glb",
     mainColor: "#f9c0ff",
-    name: "Cybertruck",
-    description:
-      "Better utility than a truck with more performance than a sports car",
+    name: "Model T",
+    description: "1908 - 1927",
     price: 72000,
     range: 660,
   },
   {
-    path: "models/model3_scene.glb",
+    path: "models/modelafinal.glb",
     mainColor: "#c0ffe1",
-    name: "Model 3",
-    description: "The car of the future",
-    price: 29740,
-    range: 576,
+    name: "Model A",
+    description: "1927 - 1931",
+    price: 500,
+    range: 30,
   },
   {
-    path: "models/semi_scene.glb",
+    path: "models/modelbnoanim.glb",
     mainColor: "#ffdec0",
-    name: "Semi",
-    description: "The Future of Trucking",
+    name: "Model B",
+    description: "1932 - 1934",
     price: 150000,
     range: 800,
-  },
+  }
 ];
 
 const CameraHandler = ({ slideDistance }) => {
@@ -49,7 +48,7 @@ const CameraHandler = ({ slideDistance }) => {
 
   const { dollyDistance } = useControls({
     dollyDistance: {
-      value: 10,
+      value: 20,
       min: 0,
       max: 50,
     },
@@ -127,6 +126,7 @@ const CameraHandler = ({ slideDistance }) => {
 
 export const Experience = () => {
   const viewport = useThree((state) => state.viewport);
+  const [slide] = useAtom(slideAtom); 
   const { slideDistance } = useControls({
     slideDistance: {
       value: 1,
@@ -182,7 +182,7 @@ export const Experience = () => {
           <planeGeometry args={[viewport.width, viewport.height]} />
           <meshBasicMaterial toneMapped={false}>
             <RenderTexture attach="map">
-              <Scene {...scene} />
+              <Scene {...scene} isActive={index === slide} />
             </RenderTexture>
           </meshBasicMaterial>
         </mesh>
