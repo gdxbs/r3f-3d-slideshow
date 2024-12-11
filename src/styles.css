@@ -1,20 +1,7 @@
-.annotation {
-  background: rgba(255, 255, 255, 0.9);
-  color: white;
-  padding: 15px;
-  border-radius: 10px;
-  max-width: 250px;
-  transform: translate3d(-50%, 0, 0);
+.font-prohibition {
+  font-family: "Prohibition", sans-serif;
 }
 
-.annotation h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.2rem;
-}
-
-.annotation .details {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  font-size: 0.9rem;
+.font-brandon {
+  font-family: "Brandon Grotesque", sans-serif;
 }

@@ -16,6 +16,7 @@ import React from "react";
 import { DEG2RAD } from "three/src/math/MathUtils";
 import { useFrame } from "@react-three/fiber";
 import { atom, useAtom } from "jotai";
+import Card from './Card';
 
 export const cameraStateAtom = atom({
   position: [3, 5, 20],
@@ -23,7 +24,7 @@ export const cameraStateAtom = atom({
   needsReset: false
 });
 
-export const Scene = ({ mainColor, path, name, description, price, range, isActive, ...props }) => {
+export const Scene = ({ mainColor, path, name, description, price, range, spheres, isActive, ...props }) => {
   const { scene } = useGLTF(path);
   const camera = useRef();
   const [cameraState, setCameraState] = useAtom(cameraStateAtom);
@@ -39,81 +40,9 @@ export const Scene = ({ mainColor, path, name, description, price, range, isActi
     return Math.min(1.2, Math.max(0.5, window.innerWidth / 1920));
   }, []);
 
-  const spherePositions = [
-    {
-      id: 'sphere1',
-      position: [4.5, 0.8, -2.3],
-      cameraPos: [6, 1, 0],
-      annotation: {
-        position: [8, 2, 0],
-        content: (
-          <div className="bg-white/90 p-3 rounded">
-            <h3 className="font-bold">Engine Compartment</h3>
-            <p>Advanced powertrain system</p>
-          </div>
-        )
-      }
-    },
-    {
-      id: 'sphere2',
-      position: [4.2, .9, 3],
-      cameraPos: [2, 1, 6],
-      annotation: {
-        position: [4, 2, 6],
-        content: (
-          <div className="bg-white/90 p-3 rounded">
-            <h3 className="font-bold">Front Suspension</h3>
-            <p>Innovative suspension design</p>
-          </div>
-        )
-      }
-    },
-    {
-      id: 'sphere3',
-      position: [-4.5, 1.5, 2.5],
-      cameraPos: [-6, 1, 6],
-      annotation: {
-        position: [-4, 2, 6],
-        content: (
-          <div className="bg-white/90 p-3 rounded">
-            <h3 className="font-bold">Interior Features</h3>
-            <p>Luxurious cabin details</p>
-          </div>
-        )
-      }
-    },
-    {
-      id: 'sphere4',
-      position: [-4.2, 3.5, -.8],
-      cameraPos: [-10, 1, 0],
-      annotation: {
-        position: [-8, 2, 0],
-        content: (
-          <div className="bg-white/90 p-3 rounded">
-            <h3 className="font-bold">Rear Design</h3>
-            <p>Aerodynamic styling</p>
-          </div>
-        )
-      }
-    },
-    {
-      id: 'sphere5',
-      position: [-3.5, 1.4, -4],
-      cameraPos: [0, 1, -10],
-      annotation: {
-        position: [-4, 6, -8],
-        content: (
-          <div className="bg-white/90 p-3 rounded">
-            <h3 className="font-bold">Roof Structure</h3>
-            <p>Reinforced framework</p>
-          </div>
-        )
-      }
-    }
-  ];
-
+ 
   const handleSphereClick = (sphereId) => {
-    const sphere = spherePositions.find(s => s.id === sphereId);
+    const sphere = spheres.find(s => s.id === sphereId);
     if (sphere) {
       setIsTransitioning(true);
       setTargetPosition(sphere.cameraPos);
@@ -122,7 +51,8 @@ export const Scene = ({ mainColor, path, name, description, price, range, isActi
       setCameraState(prev => ({
         ...prev,
         position: sphere.cameraPos,
-        lookAt: sphere.position
+        lookAt: sphere.position,
+        rotation: sphere.cameraRotation // Add camera rotation
       }));
     }
   };
@@ -178,37 +108,40 @@ export const Scene = ({ mainColor, path, name, description, price, range, isActi
         <primitive object={scene} scale={ratioScale} rotation={[0, 0, 0]} />
         
         {/* Invisible proxy objects for interaction */}
-        {spherePositions.map((sphere) => (
+        {spheres.map((sphere) => (
           <group key={sphere.id}>
-            {/* Invisible interaction sphere */}
             <mesh 
               position={sphere.position}
-              onClick={() => handleSphereClick(sphere.id)}
+              onClick={() => handleSphereClick(sphere.id, sphere.cameraPos)}
             >
               <sphereGeometry args={[1, 32, 32]} />
               <meshBasicMaterial visible={false} />
             </mesh>
-            
-            {/* Optional: Visual indicator for development */}
-            <mesh position={sphere.position}>
-              <sphereGeometry args={[0.1, 16, 16]} />
-              <meshStandardMaterial color="red" />
-            </mesh>
           </group>
         ))}
 
+        {/* Model-specific annotations */}
         {isActive && activeAnnotation && !cameraState.needsReset && 
-          spherePositions
+          spheres
             .filter(sphere => sphere.id === activeAnnotation)
             .map(sphere => (
               <Html
                 key={sphere.id}
-                distanceFactor={10}
+                distanceFactor={1}
                 position={sphere.annotation.position}
+                rotation={sphere.annotation.rotation}
                 transform
-                occlude
+                occlude={false}
               >
-                {sphere.annotation.content}
+                <div className="container mx-auto p-4">
+                  <Card
+                    title={sphere.annotation.title}
+                    description={sphere.annotation.description}
+                    imageUrl={sphere.annotation.imageUrl}
+                    linkUrl={sphere.annotation.linkUrl}
+                    linkText={sphere.annotation.linkText}
+                  />
+                </div>
               </Html>
             ))
         }
@@ -280,6 +213,6 @@ export const Scene = ({ mainColor, path, name, description, price, range, isActi
   );
 };
 
-useGLTF.preload("/models/macame.glb");
-useGLTF.preload("/models/macame.glb");
-useGLTF.preload("/models/modelbnoanim.glb");
+useGLTF.preload("/models/mt6.glb");
+useGLTF.preload("/models/ma2.glb");
+useGLTF.preload("/models/mb5.glb");

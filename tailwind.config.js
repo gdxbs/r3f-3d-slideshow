@@ -3,7 +3,8 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
-      sans: ["Nunito Sans", "sans-serif"],
+      prohibition: ['Prohibition', 'sans-serif'],
+      brandon: ['Brandon Grotesque', 'sans-serif']
     },
     extend: {},
   },

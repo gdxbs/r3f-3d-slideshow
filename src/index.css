@@ -4,6 +4,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Prohibition";
+  src: url("./fonts/ProhibitionTest-Regular.otf") format("opentype");
+  /* If the font is in src/assets/fonts, use: */
+  /* src: url('../assets/fonts/ProhibitionTest-Regular.otf') format('opentype'); */
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("./fonts/HvDTrial_Brandon_Grotesque_regular-BF64a6225c9311e1.otf")
+    format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* This helps with font loading performance */
+}
+
 #root {
   width: 100vw;
   height: 100vh;
